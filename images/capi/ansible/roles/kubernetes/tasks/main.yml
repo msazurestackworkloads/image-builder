@@ -12,8 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
+- import_tasks: debian.yml
+  when: kubernetes_source_type == "pkg" and ansible_os_family == "Debian"
+
+- import_tasks: redhat.yml
+  when: kubernetes_source_type == "pkg" and ansible_os_family == "RedHat"
+
+- import_tasks: photon.yml
+  when: kubernetes_source_type == "pkg" and ansible_os_family == "VMware Photon OS"
+
 - import_tasks: url.yml
-  when: kubernetes_source_type == "http"
+  when: kubernetes_source_type == "http" and kubernetes_cni_source_type == "http"
 
 - name: Ensure that the kubelet is running
   service:
