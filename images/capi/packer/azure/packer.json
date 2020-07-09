@@ -1,7 +1,7 @@
 {
   "variables": {
     "ansible_common_vars": "",
-    "ansible_extra_vars": "",
+    "ansible_extra_vars": "kubernetes_goarch=amd64",
     "subscription_id": null,
     "client_id": null,
     "client_secret": null,
