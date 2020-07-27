@@ -138,7 +138,7 @@ HAPROXY_OVA_VSPHERE_BUILD_NAMES		:=	$(addprefix haproxy-ova-vsphere-,$(PHOTON_VE
 
 AMI_BUILD_NAMES			?=	ami-default
 GCE_BUILD_NAMES			?=	gce-default
-AZURE_BUILD_NAMES		?=	azure-sig-ubuntu-1804 azure-vhd-ubuntu-1804
+AZURE_BUILD_NAMES		?=	azure-sig-ubuntu-1604 azure-vhd-ubuntu-1604 azure-sig-ubuntu-1804 azure-vhd-ubuntu-1804
 
 DO_BUILD_NAMES 			?=	do-default
 
@@ -228,6 +228,8 @@ $(QEMU_CLEAN_TARGETS):
 ##@ Builds
 build-ami-default: ## Builds the AMI default image
 
+build-azure-sig-ubuntu-1604: ## Builds Ubuntu 16.04 Azure managed image in Shared Image Gallery
+build-azure-vhd-ubuntu-1604: ## Builds Ubuntu 16.04 VHD image for Azure
 build-azure-sig-ubuntu-1804: ## Builds Ubuntu 18.04 Azure managed image in Shared Image Gallery
 build-azure-vhd-ubuntu-1804: ## Builds Ubuntu 18.04 VHD image for Azure
 

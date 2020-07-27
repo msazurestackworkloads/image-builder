@@ -34,16 +34,18 @@
     "kubernetes_container_registry": null,
     "existing_ansible_ssh_args": "{{env `ANSIBLE_SSH_ARGS`}}",
     "reenable_public_repos": "true",
-    "remove_extra_repos": "false"
+    "remove_extra_repos": "false",
+    "ubuntu_version": "{{env `UBUNTU_VERSION`}}",
+    "image_sku_version": "{{env `IMAGE_SKU_VERSION`}}"
   },
   "builders": [
     {
-      "name": "vhd-ubuntu-1804",
+      "name": "vhd-ubuntu-{{user `ubuntu_version`}}",
       "type": "azure-arm",
       "os_type": "Linux",
       "image_publisher": "Canonical",
       "image_offer": "UbuntuServer",
-      "image_sku": "18.04-LTS",
+      "image_sku": "{{user `image_sku_version`}}",
       "subscription_id": "{{user `subscription_id`}}",
       "client_id": "{{user `client_id`}}",
       "client_secret": "{{user `client_secret`}}",
@@ -58,17 +60,17 @@
         "build_timestamp": "{{user `build_timestamp`}}",
         "distribution": "ubuntu",
         "distribution_release": "bionic",
-        "distribution_version": "1804",
+        "distribution_version": "{{user `UBUNTU_VERSION`}}",
         "kubernetes_version": "{{user `kubernetes_semver`}}"
       }
     },
     {
-      "name": "sig-ubuntu-1804",
+      "name": "sig-ubuntu-{{user `ubuntu_version`}}",
       "type": "azure-arm",
       "os_type": "Linux",
       "image_publisher": "Canonical",
       "image_offer": "UbuntuServer",
-      "image_sku": "18.04-LTS",
+      "image_sku": "{{user `image_sku_version`}}",
       "subscription_id": "{{user `subscription_id`}}",
       "client_id": "{{user `client_id`}}",
       "client_secret": "{{user `client_secret`}}",
@@ -90,7 +92,7 @@
         "build_timestamp": "{{user `build_timestamp`}}",
         "distribution": "ubuntu",
         "distribution_release": "bionic",
-        "distribution_version": "1804",
+        "distribution_version": "{{user `UBUNTU_VERSION`}}",
         "kubernetes_version": "{{user `kubernetes_semver`}}"
       }
     }

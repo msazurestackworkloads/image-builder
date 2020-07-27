@@ -40,7 +40,6 @@ common_debs:
 - linux-tools-virtual
 - ntp
 - open-vm-tools
-- python3-distutils
 - python3-netifaces
 - python3-pip
 - socat

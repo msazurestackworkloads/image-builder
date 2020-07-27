@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export UBUNTU_VERSION="1804"
-export IMAGE_SKU_VERSION="18.04-LTS"
+export UBUNTU_VERSION="1604"
+export IMAGE_SKU_VERSION="16.04-LTS"
 az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} --tenant ${AZURE_TENANT_ID}
 az account set -s ${AZURE_SUBSCRIPTION_ID}
 export RESOURCE_GROUP_NAME=cluster-api-images

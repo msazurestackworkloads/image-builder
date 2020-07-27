@@ -19,21 +19,21 @@
 # cat packer/config/kubernetes.json
 
 #Building VHD
-make build-azure-vhd-ubuntu-1804 |& tee packer/azure/packer.out
+make build-azure-vhd-ubuntu-1804 |& tee packer/azure/packer1804.out
 
 #Getting OS VHD URL
 #directory: images/capi/packer/azure
 #condition: eq(variables.CLEANUP, 'False')
-RESOURCE_GROUP_NAME="$(cat packer/azure/packer.out | grep "resource group name:" | cut -d " " -f 4)"
-STORAGE_ACCOUNT_NAME=$(cat packer/azure/packer.out | grep "storage name:" | cut -d " " -f 3)
-OS_DISK_URI=$(cat packer/azure/packer.out | grep "OSDiskUri:" | cut -d " " -f 2)
-echo ${OS_DISK_URI} | tee packer/azure/vhd-url.out
+RESOURCE_GROUP_NAME="$(cat packer/azure/packer1804.out | grep "resource group name:" | cut -d " " -f 4)"
+STORAGE_ACCOUNT_NAME=$(cat packer/azure/packer1804.out | grep "storage name:" | cut -d " " -f 3)
+OS_DISK_URI=$(cat packer/azure/packer1804.out | grep "OSDiskUri:" | cut -d " " -f 2)
+echo ${OS_DISK_URI} | tee packer/azure/vhd-url-1804.out
 # az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant ${AZURE_TENANT_ID}
 # az account set -s ${AZURE_SUBSCRIPTION_ID}
 # ACCOUNT_KEY=$(az storage account keys list -g ${RESOURCE_GROUP_NAME} --subscription ${AZURE_SUBSCRIPTION_ID} --account-name ${STORAGE_ACCOUNT_NAME} --query '[0].value')
 # start_date=$(date +"%Y-%m-%dT00:00Z" -d "-1 day")
 # expiry_date=$(date +"%Y-%m-%dT00:00Z" -d "+1 year")
-# az storage container generate-sas --name system --permissions lr --account-name ${STORAGE_ACCOUNT_NAME} --account-key ${ACCOUNT_KEY} --start $start_date --expiry $expiry_date | tr -d '\"' | tee -a packer/azure/vhd-url.out
+# az storage container generate-sas --name system --permissions lr --account-name ${STORAGE_ACCOUNT_NAME} --account-key ${ACCOUNT_KEY} --start $start_date --expiry $expiry_date | tr -d '\"' | tee -a packer/azure/vhd-url-1804.out
 
 #cleanup - chown all files in work directory 
 chown -R $USER:$USER .
