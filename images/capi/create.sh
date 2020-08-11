@@ -4,7 +4,8 @@
 # - AZURE_CLIENT_SECRET - Service principal secret
 # - AZURE_SUBSCRIPTION_ID - Subscription ID used by the pipeline
 # - KUBERNETES_VERSION - version of Kubernetes to build the image with, e.g. `1.16.2`
-# 1.17.8
+# 1.18.2
+
 #Write configuration files
 # KUBERNETES_RELEASE=$(echo ${KUBERNETES_VERSION} | cut -d "." -f -2)
 # sed -i "s/.*kubernetes_series.*/  \"kubernetes_series\": \"v${KUBERNETES_RELEASE}\",/g" packer/config/kubernetes.json
