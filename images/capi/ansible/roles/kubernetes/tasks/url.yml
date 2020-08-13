@@ -33,7 +33,7 @@
 
 - name: Download CNI tarball
   get_url:
-    url: "{{ kubernetes_cni_http_source }}/{{ kubernetes_cni_semver }}/cni-plugins-linux-{{ kubernetes_goarch }}-{{ kubernetes_cni_semver }}.tgz"
+    url: "{{ kubernetes_cni_http_source }}/{{ kubernetes_cni_semver }}/cni-plugins-linux-amd64-{{ kubernetes_cni_semver }}.tgz"
     checksum: "{{ kubernetes_cni_http_checksum }}"
     dest: /tmp/cni.tar.gz
     mode: 0755
@@ -52,21 +52,24 @@
     path: /tmp/cni.tar.gz
 
 - name: Download Kubernetes binaries
-  get_url:
-    url: "{{ kubernetes_http_source }}/{{ kubernetes_semver }}/bin/linux/{{ kubernetes_goarch }}/{{ item }}"
-    # TODO(akutz) Write a script to separately download the checksum
-    #             and verify the associated file using the correct
-    #             checksum file format
-    #checksum: "sha1:{{ kubernetes_http_source }}/bin/linux/amd64/{{ item }}.sha1"
+  unarchive:
+    src: "{{ kubernetes_http_source }}/{{ kubernetes_semver }}-vmss/binaries/kubernetes-node-linux-amd64.tar.gz"
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy Kubernetes binaries
+  copy:
+    src: /tmp/kubernetes/node/bin/{{ item }}
     dest: "/usr/bin/{{ item }}"
     mode: 0755
     owner: root
     group: root
+    remote_src: yes
   loop: "{{ kubernetes_bins }}"
 
 - name: Download Kubernetes images
   get_url:
-    url: "{{ kubernetes_http_source }}/{{ kubernetes_semver }}/bin/linux/{{ kubernetes_goarch }}/{{ item }}"
+    url: "{{ kubernetes_http_source }}/{{ kubernetes_semver }}-vmss/images/linux/amd64/{{ item }}"
     # TODO(akutz) Write a script to separately download the checksum
     #             and verify the associated file using the correct
     #             checksum file format
@@ -77,6 +80,13 @@
 - name: Load Kubernetes images
   shell: 'CONTAINERD_NAMESPACE="k8s.io" ctr images import /tmp/{{ item }}'
   loop: "{{ kubernetes_imgs }}"
+
+- name: Retag Kubernetes images
+  shell: |
+    ctr -n=k8s.io image tag k8s.gcr.io/kube-apiserver-amd64:{{ kubernetes_semver }} k8s.gcr.io/kube-apiserver:{{ kubernetes_semver }}
+    ctr -n=k8s.io image tag k8s.gcr.io/kube-controller-manager-amd64:{{ kubernetes_semver }} k8s.gcr.io/kube-controller-manager:{{ kubernetes_semver }}
+    ctr -n=k8s.io image tag k8s.gcr.io/kube-scheduler-amd64:{{ kubernetes_semver }} k8s.gcr.io/kube-scheduler:{{ kubernetes_semver }}
+    ctr -n=k8s.io image tag k8s.gcr.io/kube-proxy-amd64:{{ kubernetes_semver }} k8s.gcr.io/kube-proxy:{{ kubernetes_semver }}
 
 - name: Remove Kubernetes images
   file:
